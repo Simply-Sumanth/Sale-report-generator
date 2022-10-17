@@ -1,0 +1,207 @@
+<!-- <!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+	<script type="text/javascript">
+		var data = document.body.getElementsByTagName('*')[0];
+
+		if(data.value.includes("looking")){
+			console.log("looking found ");
+		};
+	</script>
+</head>
+<body>
+
+	<p>user1689607 posted an answer suggesting .children (for some reason, he deleted it). I prefer the .children property over the methods suggested in this answer, because it's more concise and more obvious (.children opposed to QSA / getElementsByTagName("*"). And, after all, the children` property exists because it ought to be used when one is looking for child elements (.children excludes text nodes etc (but it includes comment nodes in <=IE8 (bug))). (and Bergi is right, QSA is supported since IE 8). – 
+Rob W
+Oct 10, 2012 at 15:50
+2
+It should be noted that querySelectorAll() and getElementsByTagName() have a different return type. querySelectorAll returns a NodeList, while getElementsByTagName returns an HTMLCollection. More on the differences between the two here: Difference between HTMLCollection, NodeLists, and arrays of objects – 
+zcoop98
+Sep 3, 2021 at 21:28</p>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Pigeon report form</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script type="text/javascript">
+	  
+    var items = ["Pressure Cooker",
+      "Electric kettle",
+      "Induction stove",
+      "2 Burner Gas stove",
+      "Mixer grinder"
+    ];
+    var prices = [599, 499, 799, 949, 699];
+    var today_sale = 0;
+    var sale = '';
+    var date = new Date();
+    var month = date.getMonth()+1;
+    var today = date.getDate() + '-' + month + '-' + date.getFullYear();
+    var output_str = "Date: " + today + "<br><br>";
+    output_str += "Hi Sir,<br>I'm User <br>from Mart name, CityName.<br><br>";
+    
+    // function to reverse a string
+	/*function toReverse(str){
+		return(str.split("").reverse().join(""));
+	}*/
+	
+	function toReverse(str){
+	  var temp = '';
+	  for(var i=str.length-1;i>=0;i--){
+		temp += str[i];
+	  }
+	  return temp;
+	}
+	
+	// function to insert commas in number as per Indian number system
+	function insert_commas(num_str){
+		var temp = "";
+		var rev = toReverse(num_str);
+		for(var i=0;i<num_str.length;i++){
+			if(i>1){
+				if(i%2==0 && i!=rev.length-1){
+					temp+=rev[i];
+					temp+=',';
+				}
+				else
+					temp+=rev[i];
+			}
+			else
+				temp+=rev[i];
+		}
+		num_str=toReverse(temp);
+		return(num_str);
+	}
+
+    // function to show report when submitted
+    function calc() {
+      var elements = document.forms.report_form.elements;
+      var c = 0; // sold products count
+      for (var i = 0; i < items.length; i++) {
+        if (Number(elements[i].value) > 0) {
+          today_sale += prices[i] * Number(elements[i].value);
+          sale += prices[i] + 'x' + elements[i].value + '+';
+          output_str += c+1 + ') ' + items[i] + ' - ' + elements[i].value + 'x' + prices[i] + "<br><br>";
+          c += 1;
+        }
+      }
+      today_sale = insert_commas(String(today_sale));
+      sale += " = " + String(today_sale);
+      output_str += "Today Sale - "+ today_sale + " /-";
+      document.getElementById("show_sale").innerHTML = "Sale:\t" + sale;
+      document.getElementById("output").innerHTML = "<br><br><br>" + output_str;
+    }
+    function dark() {
+      document.body.style.backgroundColor = "#222";
+      document.body.style.color = "white";
+      document.getElementById("container").style.border = "2px solid white";
+    }
+    function light() {
+      document.body.style.backgroundColor = "white";
+      document.body.style.color = "black";
+      document.getElementById("container").style.border = "2px solid black";
+    }
+  </script>
+  <style type="text/css">
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #222;
+      color: white;
+    }
+    table {
+      border: 2px solid white;
+      padding: 30px;
+    }
+    input[type="number"] {
+      background-color: #fff;
+      border: none;
+      border-bottom: .5px solid gray;
+      transition: .5s;
+    }
+    input[type="number"]:focus {
+      border-bottom: 1px solid black;
+      transition: .5s;
+      outline: none;
+    }
+    input[type="reset"],input[type="submit"] {
+      background-color: black;
+      color: white;
+      outline: 2px solid black;
+      border: 2px solid white;
+    }
+    #theme {
+      position: absolute;
+      top: 60px;
+      right: 20px;
+    }
+    #theme button {
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      margin: 1px;
+      outline: 0;
+    }
+    #theme #dark-button {
+      background-color: #333;
+    }
+    #theme #light-button {
+      background-color: #fff;
+    }
+    #output{
+		margin-left: 30px;
+	}
+  </style>
+</head>
+<body>
+  <h2>Enter sale details below:</h2>
+  <div id="theme">
+    <button onclick="dark()" id="dark-button"></button>
+    <button onclick="light()" id="light-button"></button>
+  </div>
+  <br><br>
+  <center>
+    <form method="POST" id="report_form" action="action_page.php" target="_blank">
+      <table id="container" cellpadding="2" cellspacing="10">
+        <tr>
+          <td>Pressure Cooker</td>
+          <td><input type="number" value="0" min="0"></td>
+        </tr>
+        <tr>
+          <td>Electric Kettle</td>
+          <td><input type="number" value="0" min="0"></td>
+        </tr>
+        <tr>
+          <td>Induction Stove</td>
+          <td><input type="number" value="0" min="0"></td>
+        </tr>
+        <tr>
+          <td>2 Burner Gas stove</td>
+          <td><input type="number" value="0" min="0"></td>
+        </tr>
+        <tr>
+          <td>Mixer grinder</td>
+          <td><input type="number" value="0" min="0"></td>
+        </tr>
+	      
+	      
+	      
+        <tr>
+          <td align="center"><input type="reset" name="" value="Reset"></td>
+          <td align="center"><input type="submit" name="" value="Calculate" onclick="calc()"></td>
+        </tr>
+      </table>
+    </form>
+  </center>
+  <p id="show_sale"></p>
+  <p id="output"></p>
+  <br>
+</body>
+</html>
